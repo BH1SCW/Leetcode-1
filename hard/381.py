@@ -1,4 +1,10 @@
 import random
+class Node:
+    def __init__(self, val, prv, nxt):
+        self.val = val
+        self.nxt = nxt
+        self.prv = prv
+
 class RandomizedCollection:
     def __init__(self):
         self.array = [] # (val, index of prev same val)
@@ -7,58 +13,79 @@ class RandomizedCollection:
 
     def insert(self, val):
         if val in self.hash:
-            # self.array[self.size] = (val, self.hash[val])
-            self.array.append((val, self.hash[val]))
+            self.array.append(Node(val, self.hash[val], None))
+            prv_node = self.array[self.hash[val]]
+            prv_node.nxt = self.size
             self.hash[val] = self.size
             self.size += 1
             return False
         else:
             # self.array[self.size] = (val, -1)
-            self.array.append((val, -1))
+            self.array.append(Node(val, None, None))
             self.hash[val] = self.size
             self.size += 1
             return True
 
     def remove(self, val):
         if val in self.hash:
-            index  = self.hash[val]
+            index = self.hash[val]
             node = self.array[index]
             last_node = self.array[self.size - 1]
-            last_val = last_node[0]
+            last_val = last_node.val
             # this is no repetitious element
-            if node[1] == -1:
+            if node.prv == None:
                 # this means we are removing the last element, there is no hole
                 if last_node == node:
                     # delete hash table entry
                     self.hash.pop(val, None)
                     # self.array[self.size - 1] = ()
                 else:
-                    # change the hash table entry
-                    self.hash[last_val] = index
-                    # change the array
-                    self.array[index] = last_node
-                    # delete hash table entry
-                    self.hash.pop(val, None)
-                    # self.array[self.size - 1] = ()
-                    # self.size -= 1
-            else:
-                if last_node == node:
-                    self.hash[last_val] = node[1]
-                    # delete hash table entry
-                    # self.array[self.size - 1] = ()
-                    # self.size -= 1
-                else:
-                    if node[1] == self.size - 1:
-                        self.hash[last_val] = index
-                        self.array[index] = last_node
-                    else:
+                    if last_node.nxt == None:
                         # change the hash table entry
                         self.hash[last_val] = index
-                        self.hash[val] = node[1]
                         # change the array
                         self.array[index] = last_node
-                        # self.array[self.size - 1] = ()
-                        # self.size -= 1
+                        # delete hash table entry
+                        self.hash.pop(val, None)
+                    else:
+                        nxt_node = self.array[last_node.nxt]
+                        nxt_node.prv = index
+                        if last_node.prv != None:
+                            prv_node = self.array[last_node.prv]
+                            prv_node.nxt = index
+                        # change the array
+                        self.array[index] = last_node
+                        # delete hash table entry
+                        self.hash.pop(val, None)
+            else:
+                self.hash[val] = node.prv
+                self.array[node.prv].nxt = None
+                if last_node == node:
+                    self.hash[last_val] = node.prv
+                else:
+                    if node.prv == self.size - 1:
+                        self.hash[last_val] = index
+                        self.array[index] = last_node
+                        if last_node.prv != None:
+                            prv_node = self.array[last_node.prv]
+                            prv_node.nxt = index
+                    else:
+                        if last_node.nxt == None:
+                            # change the hash table entry
+                            self.hash[last_val] = index
+                            # change the array
+                            self.array[index] = last_node
+                            if last_node.prv != None:
+                                prv_node = self.array[last_node.prv]
+                                prv_node.nxt = index
+                        else:
+                            nxt_node = self.array[last_node.nxt]
+                            nxt_node.prv = index
+                            if last_node.prv != None:
+                                prv_node = self.array[last_node.prv]
+                                prv_node.nxt = index
+                            # change the array
+                            self.array[index] = last_node
             self.array.pop()
             self.size -= 1
             return True
@@ -66,7 +93,16 @@ class RandomizedCollection:
             return False
 
     def getRandom(self):
-        return self.array[random.randint(0, self.size - 1)][0]
+        return self.array[random.randint(0, self.size - 1)].val
+
+    def print(self):
+        print(self.hash)
+        s = ''
+        for i in range(self.size):
+            n = self.array[i]
+            # s += '{}: (val:{}, nxt:{}) '.format(i, n.val, n.nxt)
+            s += '{}: (val:{}, nxt:{}, prv:{}) '.format(i, n.val, n.nxt, n.prv)
+        print(s)
 
 if __name__ == "__main__":
     ran = RandomizedCollection()
@@ -87,21 +123,17 @@ if __name__ == "__main__":
             # if val[0] == 13:
                 #print("Error here.")
             print("Before insert {}".format(val))
-            print(ran.hash)
-            print(ran.array)
+            ran.print()
             ran.insert(val)
             print("After insert {}".format(val))
-            print(ran.hash)
-            print(ran.array)
+            ran.print()
             print('-' * 30)
         if com == "remove":
             print("Before remove {}".format(val))
-            print(ran.hash)
-            print(ran.array)
+            ran.print()
             ran.remove(val)
             print("After remove {}".format(val))
-            print(ran.hash)
-            print(ran.array)
+            ran.print()
             print('-' * 30)
                 # print("-" * 30)
                 # print("ERROR")
