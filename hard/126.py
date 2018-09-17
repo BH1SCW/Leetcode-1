@@ -66,26 +66,18 @@ class Solution:
                         if if_search:
                             queue.append(adj)
                     else:
-                        # this place has been reached but also connected
-                        if if_search:
+                        if color[u] == color[adj]:
                             if dis[adj] == dis[u] + 1:
                                 if color[u] == GRAY:
                                     parent[adj].append(u)
                                 else:
                                     parent[u].append(adj)
                         else:
-                            if color[u] == color[adj]:
-                                if dis[adj] == dis[u] + 1:
-                                    if color[u] == GRAY:
-                                        parent[adj].append(u)
-                                    else:
-                                        parent[u].append(adj)
-                            else:
-                                if dis[adj] + dis[u] <= finalDis:
-                                    if color[u] == GRAY:
-                                        parent[adj].append(u)
-                                    else:
-                                        parent[u].append(adj)
+                            if dis[adj] + dis[u] <= finalDis:
+                                if color[u] == GRAY:
+                                    parent[adj].append(u)
+                                else:
+                                    parent[u].append(adj)
                         # print("parent of {0} is {1}".format(wordList[adj], wordList[u]))
             color[u] = BLACK # 3 is black
         # print("BFS: {}".format(time.time() - s1))
