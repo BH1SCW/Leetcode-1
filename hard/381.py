@@ -35,28 +35,20 @@ class RandomizedCollection:
             # this is no repetitious element
             if node.prv == None:
                 # this means we are removing the last element, there is no hole
-                if last_node == node:
-                    # delete hash table entry
-                    self.hash.pop(val, None)
-                    # self.array[self.size - 1] = ()
-                else:
+                if last_node != node:
                     if last_node.nxt == None:
                         # change the hash table entry
                         self.hash[last_val] = index
-                        # change the array
-                        self.array[index] = last_node
-                        # delete hash table entry
-                        self.hash.pop(val, None)
                     else:
                         nxt_node = self.array[last_node.nxt]
                         nxt_node.prv = index
                         if last_node.prv != None:
                             prv_node = self.array[last_node.prv]
                             prv_node.nxt = index
-                        # change the array
-                        self.array[index] = last_node
-                        # delete hash table entry
-                        self.hash.pop(val, None)
+                    # change the array
+                    self.array[index] = last_node
+                # delete hash table entry
+                self.hash.pop(val, None)
             else:
                 self.hash[val] = node.prv
                 self.array[node.prv].nxt = None
@@ -65,27 +57,18 @@ class RandomizedCollection:
                 else:
                     if node.prv == self.size - 1:
                         self.hash[last_val] = index
-                        self.array[index] = last_node
-                        if last_node.prv != None:
-                            prv_node = self.array[last_node.prv]
-                            prv_node.nxt = index
                     else:
                         if last_node.nxt == None:
                             # change the hash table entry
                             self.hash[last_val] = index
-                            # change the array
-                            self.array[index] = last_node
-                            if last_node.prv != None:
-                                prv_node = self.array[last_node.prv]
-                                prv_node.nxt = index
                         else:
                             nxt_node = self.array[last_node.nxt]
                             nxt_node.prv = index
-                            if last_node.prv != None:
-                                prv_node = self.array[last_node.prv]
-                                prv_node.nxt = index
-                            # change the array
-                            self.array[index] = last_node
+                    # change the array
+                    self.array[index] = last_node
+                    if last_node.prv != None:
+                        prv_node = self.array[last_node.prv]
+                        prv_node.nxt = index
             self.array.pop()
             self.size -= 1
             return True
