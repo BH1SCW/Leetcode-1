@@ -5,51 +5,31 @@ class Solution:
         :rtype: int
         """
         # if_debug = True
-        w = len(matrix)
-        if w == 0:
+        if not matrix:
             return 0
-        l = len(matrix[0])
-        hash = {}
-        max = 0
-        for sw in range(1, w + 1):
-            for sl in range(1, l + 1):
-                for i in range(w):
-                    for j in range(l):
-                        if int(matrix[i][j]) == 0:
-                            hash[(i, j), (i + sw - 1, j + sl - 1)] = 0
-                            continue
-                        # the rec must be legal
-                        if i + sw - 1 < w and j + sl - 1 < l:
-                            if sw == 1:
-                                if sl == 1:
-                                    rec = int(matrix[i][j])
-                                else:
-                                    small_rec1 = ((i, j), (i, j + sl - 2))
-                                    small_rec2 = ((i, j + sl - 1), (i, j + sl - 1))
-                                    rec = hash[small_rec1] and hash[small_rec2]
-                            else:
-                                small_rec1 = ((i, j), (i + sw - 2, j + sl - 1))
-                                small_rec2 = ((i + sw - 1, j), (i + sw - 1, j + sl - 1))
-                                rec = hash[small_rec1] and hash[small_rec2]
-                            hash[(i, j), (i + sw - 1, j + sl - 1)] = rec
-                            if rec:
-                                # if if_debug:
-                                #     print(('shape: {} x {}').format(sw, sl))
-                                #     print(small_rec1)
-                                #     print(small_rec2)
-                                #     print((i, j), (i + sw - 1, j + sl - 1))
-                                if sw * sl > max:
-                                    max = sw * sl
-        # if if_debug:
-        #     print(max)
-        return max
+        w = len(matrix[0])
+        l = len(matrix)
+        hist_old = [int(i) for i in matrix[0]]
+        max_area = largest_area(hist_old)
+        hist_current = [0 for i in range(w)]
+        for i in range(1, l):
+            for j in range(w):
+                hist_current[j] = hist_old[j] + 1 if matrix[i][j] == '1' else 0
+            max_area = max(largest_area(hist_current), max_area)
+            hist_current, hist_old = hist_old, hist_current
+        return max_area
 
-if __name__ == '__main__':
-    m=[["1","0","1","0","0"],
-       ["1","0","1","1","1"],
-       ["1","1","1","1","1"],
-       ["1","0","0","1","0"]]
-    m = [["1"]]
-    sol = Solution()
-    sol = sol.maximalRectangle(m)
+def largest_area(heights):
+        s = []
+        i = 0
+        max = 0
+        while (i <= len(heights)):
+            if not s or (i < len(heights) and heights[i] >= heights[s[-1]]):
+                s.append(i)
+                i += 1
+            else:
+                j = s.pop()
+                area = heights[j] * (i - 1 - s[-1] if s else i)
+                max = area if area > max else max
+        return max
 
