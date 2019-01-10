@@ -3,6 +3,15 @@
 # i = 0, j = 0
 # T[i][j] means whether s[0:i] and s[0:j]
 class Solution:
+    def simpleMatch(self, s, p):
+        if len(s) == 0:
+            return True
+        if p != ".":
+            for i in s:
+                if i != p:
+                    return False
+        return True
+
     def isMatch(self, s, p):
         """
         :type s: str
@@ -11,35 +20,35 @@ class Solution:
         """
         ls = len(s)
         lp = len(p)
-        T = [[0] * (ls + 1) for i in range(lp + 1)] # T[1][1] corresponds to p[0] and s[0]
-        T[0][0] = 1
-        for i in range(1, lp):
-            for j in range(1, ls):
-                # if current is *
-                if p[i - 1] == '*':
-                    T[i][j] == T[i - 1][j]
-                    continue
-                # if previous is not * and next is not *
-                if (i == lp or p[i] != '*') and (i <= 1 or p[i - 2] != '*'):
+        T = [[False] * (ls + 1) for i in range(lp + 1)]  # T[1][1] corresponds to p[0] and s[0]
+        T[0][0] = True
+        for i in range(1, lp + 1):
+            # current is *
+            if p[i - 1] == '*':
+                for j in range(0, ls + 1):
+                    T[i][j] = T[i - 1][j]
+                continue
+            # next is not *
+            if i >= lp or p[i] != '*':
+                for j in range(1, ls + 1):
                     T[i][j] = T[i - 1][j - 1] and ((p[i - 1] == '.') or (p[i - 1] == s[j - 1]))
+                continue
+            # 0 corresponds to empty
+            for j in range(0, ls + 1):
+                # k occurrence
+                if j == 0:
+                    T[i][j] = T[i - 1][0]
                     continue
-                # if previous is * and next is not *
-                if (i == lp or p[i] != '*') and (i >= 2 and p[i - 2] == '*'):
-                    T[i][j] = (T[i - 1][j - 1] or T[i - 2][j - 1]) and ((p[i - 1] == '.') or (p[i - 1] == s[j - 1]))
-                    continue
-                # if previous is * and next is *
-                if (i != lp and p[i] == '*') and (i >= 1 and p[i - 2] == '*'):
-                    if j >= 2 and s[j - 1] == s[j - 2]:
-                        T[i][j] = (T[i - 1][j - 1] or T[i - 2][j - 1])
-                    else:
-                        T[i][j] = (T[i - 1][j - 1] or T[i - 2][j - 1]) and ((p[i - 1] == '.') or (p[i - 1] == s[j - 1]))
-                    continue
-                # if previous is not * and next is *
-                if (i != lp and p[i] == '*') and (i <= 1 or p[i - 2] != '*'):
-                    if j >= 2 and s[j - 1] == s[j - 2]:
-                        T[i][j] = T[i - 1][j - 1]
-                    else:
-                        T[i][j] = (T[i - 1][j - 1]) and ((p[i - 1] == '.') or (p[i - 1] == s[j - 1]))
-                    continue
+                for k in range(j + 1):
+                    if T[i - 1][j - k] and self.simpleMatch(s[j - k : j], p[i - 1]):
+                        T[i][j] = True
+                        continue
 
         return T[-1][-1]
+
+
+if __name__ == '__main__':
+    sol = Solution()
+    s = 'a'
+    p = 'a*'
+    print(sol.isMatch(s, p))
