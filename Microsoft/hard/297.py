@@ -64,24 +64,6 @@ def ConstructTree(l, i):
     else:
         return None
 
-def serial(root, result):
-    if root != None:
-        result.append(root.val)
-        serial(root.left, result)
-        serial(root.right, result)
-    else:
-        result.append(None)
-
-def deserial(s):
-    mid = len(s) // 2
-    if s[mid] == "None":
-        return None
-    else:
-        t = TreeNode(int(s[mid]))
-        t.left = deserial(s[0: mid])
-        t.right = deserial(s[mid + 1: ])
-        return t
-
 class Codec:
     def serialize(self, root):
         """Encodes a tree to a single string.
@@ -107,6 +89,8 @@ class Codec:
         :rtype: TreeNode
         """
         def doit():
+            # Important: this next is sloppy, since the last one is always None, there should be no problem here. Otherwise
+            #   you should be careful.
             val = next(l)
             if val != 'None':
                 t = TreeNode(val)
@@ -115,6 +99,7 @@ class Codec:
                 return t
             else:
                 return None
+        # important: the manipulation of string and list is.
         l = data.split(" ")
         l = iter(l)
         t = doit()
@@ -134,7 +119,6 @@ if __name__ == '__main__':
     flat = []
     tree.traverse(flat)
     print(flat)
-
     data = sol.serialize(tree)
     print(data)
     result = sol.deserialize(data)

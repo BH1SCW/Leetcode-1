@@ -1,7 +1,9 @@
-#st  [0 1 2 3 4 5 6 7]
-# [5 7 9 11 13 6]
-# [0 1 2 3 4 5 6 7]
-# [5 7 9 11 13 6]
+# Divide and Conquer
+# [0 1 2 3 4 5 6 7] m = 8
+# [5 7 9 11 13 6] n = 6
+from Algorithm.Heapsort import Rand
+from Algorithm.QuickSort import QuickSort
+# important: this still cannot handle empty list, but this is good enough
 class Solution:
     def findMedianSortedArrays(self, nums1, nums2):
         """
@@ -9,72 +11,62 @@ class Solution:
         :type nums2: List[int]
         :rtype: float
         """
-        if not nums1:
-            return median(nums2)
-        if not nums2:
-            return median(nums1)
-        if len(nums1) >= len(nums2):
-            return med(nums1, nums2)
-        else:
-            return med(nums2, nums1)
+        global i, j, median
+        m = len(nums1)
+        n = len(nums2)
+        i = 0
+        j = 0
+        lb = 0
+        ub = m
+        median = 0
+        if m != 0 and n != 0:
+            while lb <= ub:
+                # m = 8, n = 7, k = 8
+                i = (lb + ub) // 2 # i = 3
+                j = (n + m + 1) // 2 - i # j = 4
+                if i <= m - 1 and j >= 1 and nums2[j - 1] > nums1[i]:
+                    lb = i + 1
+                    continue
+                if i >= 1 and j <= n - 1 and nums1[i - 1] > nums2[j]:
+                    ub = i - 1
+                    continue
+                median = max(nums1[i - 1], nums2[j - 1])
+                break
+            if (n + m) % 2 == 1:
+                return median
+            if i == m:
+                return (median + nums2[j]) / 2.0
+            if j == n:
+                return (median + nums1[i]) / 2.0
+            return (median + min(nums1[i], nums2[j])) / 2.0
+        if m == 0:
+            return med(nums2)
+        if n == 0:
+            return med(nums1)
 
-def median(l):
-    lth = len(l)
-    try:
-        if lth % 2 == 0:
-            return (l[lth // 2] + l[lth // 2 - 1]) / 2.0
-        else:
-            return (l[(lth - 1) // 2])
-    except:
-        print(l)
-
-def med(l1, l2):
-    lth1 = len(l1)
-    lth2 = len(l2)
-    assert len(l1) >= len(l2)
-    cut = (lth2 - 1) // 2
-    if lth2 == 1:
-        if lth1 == 1:
-            return (l1[0] + l2[0]) / 2.0
-        if lth1 == 2:
-            if l2[0] <= l1[0]:
-                return l1[0]
-            if l2[0] >= l1[1]:
-                return  l1[1]
-            return l2[0]
-        if lth1 % 2 == 0:
-            if l2[0] >= l1[lth1 // 2]:
-                return l1[lth1 // 2]
-            if l2[0] <= l1[lth1 // 2 - 1]:
-                return l1[lth1// 2 - 1]
-            return l2[0]
-        else:
-            if l2[0] >= l1[(lth1 - 1) // 2 + 1]:
-                return (l1[(lth1 - 1) // 2] + l1[(lth1 - 1) // 2 + 1]) / 2.0
-            if l2[0] <= l1[(lth1 - 1) // 2 - 1]:
-                return (l1[(lth1 - 1) // 2] + l1[(lth1 - 1) // 2 - 1]) / 2.0
-            return (l1[(lth1 - 1) // 2] + l2[0]) / 2.0
-    if lth2 == 2:
-        if lth1 == 2:
-            return (max(l1[0], l2[0]) + min(l1[1], l2[1])) / 2.0
-        if lth1 % 2 == 0:
-            if min(l2) >= l1[lth1 // 2 + 1]:
-                return (l1[lth1 // 2] + l1[lth1 // 2 + 1]) / 2.0
-            if max(l2) <= l1[lth1 // 2 - 2]:
-                return (l1[lth1 // 2 - 1] + l1[lth1 // 2 - 2]) / 2.0
-            return med([l1[lth1 // 2 - 1], l1[lth1 // 2]], l2)
-        else:
-            if min(l2) >= l1[(lth1 - 1) // 2]:
-                return min(min(l2), l1[(lth1 - 1) // 2 + 1])
-            if max(l2) <= l1[(lth1 - 1) // 2]:
-                return max(max(l2), l1[(lth1 - 1) // 2 - 1])
-            return l1[(lth1 - 1) // 2]
-    med1 = median(l1)
-    med2 = median(l2)
-    if med1 == med2:
-        return med1
-    if med1 > med2:
-        return med(l1[0 : lth1 - cut], l2[cut : ])
+def med(l):
+    if len(l) % 2 == 1:
+        return l[len(l) // 2]
     else:
-        return med(l1[cut : ], l2[0 : lth2 - cut])
+        return l[len(l) // 2] + l[len(l) // 2 - 1]
+
+
+if __name__ == '__main__':
+    sol = Solution()
+    s1 = Rand(10)
+    s2 = Rand(20)
+    QuickSort(s1, 0, 9)
+    QuickSort(s2, 0, 19)
+    s1 = [1, 3]
+    s2 = [2]
+    s1 = [2]
+    s2 = []
+    s1 = []
+    s2 = [2]
+    s1= [1]
+    s2 = [2, 3, 4]
+    print(sol.findMedianSortedArrays(s1, s2))
+
+
+
 
