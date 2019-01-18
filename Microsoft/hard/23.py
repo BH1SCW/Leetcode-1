@@ -1,5 +1,9 @@
 # Merge k sorted list
 # T(k) = 2T(k/2) + O(nk), n can ce seen as constant, so complexity is nklgk
+# important: there are two ways to do this problem:
+#   divide and conquer
+#   minheap
+# this problem is not hard actually
 
 # Definition for singly-linked list.
 from Algorithm.Heapsort import Rand
