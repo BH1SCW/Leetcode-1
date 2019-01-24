@@ -1,4 +1,8 @@
 from Algorithm.Heapsort import Rand
+# important: this is not hard, but this method is too fussy.
+# The reason is that i did everything inplace. However, with a dummy node, things would be much much easier
+# important: everything would be more fussier when INPLACE, please avoid this and use dummy variables as often as possible.
+import math
 class ListNode:
     def __init__(self, x):
         self.val = x
@@ -22,24 +26,7 @@ def printList(s):
         s = s.next
     print(s1)
 
-def reverseFirstK(lists, k):
-    head = lists
-    if head is None or head.next is None:
-        return head, None
-    move = head
-    oldMove = move
-    i = k
-    while i >= 2:
-        if oldMove is None or oldMove.next is None:
-            return reverseFirstK(head, k - i + 1)
-        else:
-            move = oldMove.next
-        tail = move.next # 1(head) -> 2(move) -> (3 -> ...)tail
-        move.next = head # 1(head) -> 2(move) -> 1(head)
-        oldMove.next = tail # 2(move) -> 1(head) -> (3 -> ...)tail
-        head = move# 2(head) -> 1(move) -> (3 -> ...)tail
-        i -= 1
-    return head, oldMove
+
 
 
 class Solution:
@@ -49,14 +36,21 @@ class Solution:
         :type k: int
         :rtype: ListNode
         """
-        head, tail = reverseFirstK(head, k)
-        printList(head)
-        while not tail is None:
-            oldTail = tail
-            newHead, tail = reverseFirstK(tail.next, k)
-            # printList(newHead)
-            oldTail.next = newHead
-        return head
+        dummy = jump = ListNode(0)
+        dummy.next = l = r = head
+        while True:
+            count = 0
+            while r and count < k:  # use r to locate the range
+                r = r.next
+                count += 1
+            if count == k:  # if size k satisfied, reverse the inner linked list
+                pre, cur = r, l
+                for _ in range(k):
+                    cur.next, cur, pre = pre, cur.next, cur  # standard reversing
+                jump.next, jump, l = pre, l, r  # connect two k-groups
+            else:
+                return dummy.next
+
 
 
 

@@ -1,15 +1,15 @@
 - [] 1 Two Sum 23.0% Easy
 - [] 2 Add Two Numbers 23.0% Medium
-- [] 4 Median of Two Sorted Arrays 18.6% Hard
+- [x] 4 Median of Two Sorted Arrays 18.6% Hard
 - [] 5 Longest Palindromic Substring 23.0% Medium
 - [] 8 String to Integer (atoi) 13.5% Easy
 - [] 13 Roman to Integer 39.2% Easy
 - [] 15 3Sum 18.8% Medium
 - [] 20 Valid Parentheses 29.3% Easy
 - [] 21 Merge Two Sorted Lists 35.4% Easy
-- [] 23 Merge k Sorted Lists 23.3% Hard
+- [x] 23 Merge k Sorted Lists 23.3% Hard
 - [] 24 Swap Nodes in Pairs 35.1% Easy
-- [] 25 Reverse Nodes in k-Group 27.5% Hard
+- [x] 25 Reverse Nodes in k-Group 27.5% Hard
 - [] 26 Remove Duplicates from Sorted Array 33.4% Easy
 - [] 28 Implement strStr() 24.8% Easy
 - [] 33 Search in Rotated Sorted Array 30.2% Hard
@@ -34,8 +34,8 @@
 - [] 106 Construct Binary Tree from Inorder and Postorder Traversal 29.0% Medium
 - [] 112 Path Sum 31.3% Easy
 - [] 114 Flatten Binary Tree to Linked List 31.0% Medium
-- [] 116 Populating Next Right Pointers in Each Node 36.5% Medium
-- [] 117 Populating Next Right Pointers in Each Node II 32.8% Hard
+- [x] 116 Populating Next Right Pointers in Each Node 36.5% Medium
+- [x] 117 Populating Next Right Pointers in Each Node II 32.8% Hard
 - [] 121 Best Time to Buy and Sell Stock 36.0% Easy
 - [] 124 Binary Tree Maximum Path Sum 23.3% Hard
 - [] 125 Valid Palindrome 23.8% Easy
@@ -61,7 +61,7 @@
 - [] 212 Word Search II 19.3% Hard
 - [] 213 House Robber II 30.5% Medium
 - [] 215 Kth Largest Element in an Array 33.1% Medium
-- [] 218 The Skyline Problem 22.0% Hard
+- [x] 218 The Skyline Problem 22.0% Hard
 - [] 232 Implement Queue using Stacks 33.9% Easy
 - [] 235 Lowest Common Ancestor of a Binary Search Tree 37.7% Easy
 - [] 236 Lowest Common Ancestor of a Binary Tree 28.8% Medium
@@ -72,6 +72,6 @@
 - [] 270 Closest Binary Search Tree Value 34.3% Easy
 - [] 273 Integer to English Words 18.7% Hard
 - [] 285 Inorder Successor in BST 35.6% Medium
-- [x] 297 Serialize and Deserialize Binary Tree 27.8% Hard
+- [] 297 Serialize and Deserialize Binary Tree 27.8% Hard
 - [] 300 Longest Increasing Subsequence 34.2% Medium
 - [] 333 Largest BST Subtree 26.5% Medium
