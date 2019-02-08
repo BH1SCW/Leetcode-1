@@ -1,40 +1,41 @@
-def getKeyPoints(l):
-    result = []
-    for i in range(len(l)):
-        if i + 1 <= len(l) - 1:
-            if l[i + 1][0] == l[i][0]:
-                l[i + 1][2] = max(l[i][2], l[i + 1][2])
-                continue
-        result.append([l[i][0], l[i][2]])
-    return result
-
-
+import heapq
 class Solution:
     def getSkyline(self, buildings):
         """
         :type buildings: List[List[int]]
         :rtype: List[List[int]]
         """
-        left = sorted(buildings)
-        right = sorted(buildings, key=lambda k : k[1])
-        result = []
-        for i in range(len(left)):
-            if i + 1 <= len(left) - 1:
-                if left[i + 1][0] == left[i][0]:
-                    left[i + 1][2] = max(left[i][2], left[i + 1][2])
-                    continue
-            result.append([left[i][0], left[i][2]])
-        for i in range(len(right) - 1, - 1, - 1):
-            if i - 1 <= len(right) - 1:
-                if right[i + 1][0] == right[i][0]:
-                    right[i + 1][2] = max(right[i][2], right[i + 1][2])
-                    continue
-            result.append([right[i][0], right[i][2]])
+        active = []
+        inactive = set()
+        map = {}
+        events = []
+        ans = []
+        max_height = 0
+        for bd in sorted(buildings):
+            start, end = (bd[0], -bd[2], 'l'), (bd[1], -bd[2], 'r')
+            events.append(start)
+            events.append(end)
+            map[end] = start
+        for e in sorted(events):
+            if e[-1] == 'l':
+                heapq.heappush(active, (e[1], e[0], e[2]))
+                heapq.heapify(active)
+            else:
+                inactive.add(map[e])
+            while active and (active[0][1], active[0][0], 'l') in inactive:
+                heapq.heappop(active)
+            max_height = - active[0][0] if active else 0
+            if ans and ans[-1][0] == e[0]:
+                ans[-1] = [e[0], max_height]
+            else:
+                if not ans or ans[-1][1] != max_height:
+                    ans.append([e[0], max_height])
+        return ans
 
+if __name__ == '__main__':
+    b = [[1, 2, 1]]
+    # b = [[1, 3, 1], [2, 4, 2]]
+    # b = [[2,9,10],[3,7,15],[5,12,12],[15,20,10],[19,24,8]]
+    sol = Solution()
+    print(sol.getSkyline(b))
 
-
-
-
-
-
-# [[2,9,10], [3,7, 15], [5, 12, 12], [15, 20, 10], [19, 24, 8] ]
