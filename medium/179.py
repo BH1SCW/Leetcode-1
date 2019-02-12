@@ -7,8 +7,6 @@ class Solution:
         return str(int(''.join(ns)))
 
 
-
-
 if __name__ == '__main__':
     nums = [10, 2]
     nums = [3,30,34,5,9]
