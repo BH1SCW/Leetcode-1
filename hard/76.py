@@ -1,4 +1,3 @@
-import math
 class Solution:
     def minWindow(self, s, t):
         """
@@ -9,14 +8,13 @@ class Solution:
         target = {}
         counter = {}
         missing = set()
-        over = set()
         for ch in t:
             if not ch in target:
                 target[ch] = 0
                 counter[ch] = 0
             target[ch] += 1
             missing.add(ch)
-        i, j = 0, 0
+        i = 0
         while i < len(s) and not s[i] in target:
             i += 1
         j = i
@@ -25,54 +23,37 @@ class Solution:
             counter[s[i]] += 1
             if counter[s[i]] == target[s[i]]:
                 missing.remove(s[i])
-        while(i <= j and i < len(s)):
-            if len(missing) == 0:
-                if J == -1 or j - i < J - I:
-                    I, J = i, j
-                counter[s[i]] -= 1
-                if counter[s[i]] < target[s[i]]:
-                    missing.add(s[i])
-                i += 1
-                while(i < len(s) and not s[i] in target):
-                    i += 1
-                if i >= len(s):
-                    break
-                if not len(missing):
-                    if J == -1 or j - i < J - I:
-                        I, J = i, j
-                j += 1
-                while(j < len(s) and not s[j] in target):
-                    j += 1
-                if j >= len(s):
-                    break
-                counter[s[j]] += 1
-                if counter[s[j]] == target[s[j]]:
-                    missing.remove(s[j])
-                else:
-                    over.add(s[j])
-                continue
+        while(i <= j and j < len(s)):
             if len(missing):
                 j += 1
-                while(j < len(s) and not s[j] in target):
-                    j += 1
-                if j >= len(s):
-                    break
-                counter[s[j]] += 1
-                if counter[s[j]] >= target[s[j]] and s[j] in missing:
-                    missing.remove(s[j])
-                # if counter[s[j]] > target[s[j]]:
-                #     over.add(s[j])
-            # if len(over):
-            #     counter[s[i]] -= 1
-            #     if counter[s[i]] == target[s[i]]:
-            #         over.remove(s[i])
-            #     if counter[s[i]] < target[s[i]]:
-            #         missing.add(s[i])
-            #     i += 1
-            #     while(i < len(s) and not s[i] in target):
-            #         i += 1
-            #     if i >= len(s):
-            #         break
+                while j < len(s):
+                    if not s[j] in counter:
+                        j += 1
+                    else:
+                        if not s[j] in missing:
+                            counter[s[j]] += 1
+                            j += 1
+                        else:
+                            counter[s[j]] += 1
+                            if counter[s[j]] >= target[s[j]]:
+                                missing.remove(s[j])
+                            break
+            else:
+                while i < len(s):
+                    if not s[i] in counter:
+                        i += 1
+                    else:
+                        if counter[s[i]] > target[s[i]]:
+                            counter[s[i]] -= 1
+                            i += 1
+                            continue
+                        if counter[s[i]] == target[s[i]]:
+                            if J == -1 or j - i < J - I:
+                                I, J = i, j
+                            counter[s[i]] -= 1
+                            missing.add(s[i])
+                            i += 1
+                            break
         return s[I: J + 1]
 
 
