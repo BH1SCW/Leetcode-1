@@ -1,46 +1,22 @@
 class Solution:
     def isMatch(self, s: 'str', p: 'str') -> 'bool':
+        while len(p) >= 2 and  p[0] == "*" and p[1] == "*":
+            p = p[1:]
         if len(p) == 0:
-            if len(s) != 0:
-                return False
-            else:
-                return True
-        if len(s) == 0:
-            if len(p) == 1 and p[0] == "*":
-                return True
-            else:
-                return False
-        # # ans = [[False] * len(s)] * len(p)
+            return not len(s)
         ans = [[False for i in range(len(s) + 1)] for j in range(len(p))]
+        # match empty string
+        ans[0][0] = p[0] == "*"
         for i in range(len(p)):
-            for j in range(len(s) + 1):
-                if p[i] == "*":
-                    if i == 0:
-                        ans[i][j] = True
-                        continue
-                    if j == 0:
-                        continue
-                    if i - 1 >= 0 and j - 1 >= 0:
-                        # zero occurence
-                        ans[i][j] = ans[i - 1][j]
-                        # one or more
-                        if ans[i - 1][j - 1]:
-                            for k in range(j - 1, len(s) + 1):
-                                ans[i][k] = True
-                            break
-                if p[i] == "?":
-                    if i == 0:
-                        ans[i][1] = True
+            for j in range(1, len(s) + 1):
+                if p[i] != "*":
+                    if i > 0:
+                        ans[i][j] = ans[i - 1][j - 1] and (p[i] == s[j - 1] or p[i] == "?")
+                    else:
+                        ans[i][1] = p[0] == s[0] or p[0] == "?"
                         break
-                    if i - 1 >= 0 and j - 1 >= 0 and (ans[i - 1][j - 1]):
-                        ans[i][j] = True
-                        continue
-                if p[i] != "*" and p[i] != "?":
-                    if i == 0:
-                        ans[i][1] = p[i] == s[i]
-                        break
-                    if i - 1 >= 0 and j - 1 >= 0 and ans[i - 1][j - 1]:
-                        ans[i][j] = p[i] == s[j - 1]
+                else:
+                        ans[i][j] = (i > 0 and ans[i - 1][j]) or ans[i][j - 1]
         return ans[-1][-1]
 
 
