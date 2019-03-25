@@ -1,4 +1,3 @@
-from functools import reduce
 class Solution:
     def solveNQueens(self, n: int) -> 'List[List[str]]':
         rows = [0] * n
@@ -7,28 +6,18 @@ class Solution:
         diags2 = [0] * (2 * n - 1)
         board = [['.'] * n for _ in range(n)]
         ans = []
-        def fill(i, j, num):
-            if j == n:
-                return
+        def dfs(i):
             if i == n:
-                ans.append([reduce(lambda x, y: x+y, ls) for ls in board])
+                ans.append([''.join(ls) for ls in board])
                 return
-            di1 = i + j
-            di2 = n - 1 - i + j
-            if (not cols[i] and not rows[j] and not diags1[di1] and not diags2[di2]):
-                cols[i] = 1
-                rows[j] = 1
-                diags1[di1] = 1
-                diags2[di2] = 1
-                board[i][j] = 'Q'
-                fill(i + 1, 0, num - 1)
-                cols[i] = 0
-                rows[j] = 0
-                diags1[di1] = 0
-                diags2[di2] = 0
-                board[i][j] = '.'
-            fill(i, j + 1, num)
-        fill(0, 0, n)
+            for j in range(n):
+                di1 = i + j
+                di2 = n - 1 - i + j
+                if (not cols[i] and not rows[j] and not diags1[di1] and not diags2[di2]):
+                    cols[i], rows[j], diags1[di1], diags2[di2], board[i][j] = 1, 1, 1, 1, 'Q'
+                    dfs(i + 1)
+                    cols[i], rows[j], diags1[di1], diags2[di2], board[i][j] = 0, 0, 0, 0, '.'
+        dfs(0)
         return ans
 
 
