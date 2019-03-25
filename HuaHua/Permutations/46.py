@@ -13,6 +13,18 @@ class Solution:
         dfs(nums, [])
         return ans
 
+# ans=[] path=[] ns=[1, 2, 3]
+# ans=[] path=[1] ns=[2, 3]
+# ans=[] path=[1, 2] ns=[3]
+# ans=[] path=[1, 2, 3] ns=[]
+# ans=[] path=[1, 3] ns=[2]
+# ans=[] path=[1, 3, 2] ns=[]
+
+# ans=[] path=[2] ns=[1, 3]
+# ans=[] path=[2, 1] ns=[3]
+# ans=[] path=[2, 1, 3] ns=[]
+
+# ans=[] path=[3] ns=[1, 2]
 
 if __name__ == '__main__':
     sol = Solution()
