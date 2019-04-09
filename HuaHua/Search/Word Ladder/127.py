@@ -25,11 +25,11 @@ class Solution:
                 for i in range(l):
                     for c in string.ascii_lowercase:
                         new = word[:i] + c + word[i + 1:]
-                        if (new in dict):
-                            q.add(new)
-                            dict.remove(new)
                         if new in q2:
                             return step + 1
+                        if new in dict:
+                            q.add(new)
+                            dict.remove(new)
             q1 = q
         return 0
 
