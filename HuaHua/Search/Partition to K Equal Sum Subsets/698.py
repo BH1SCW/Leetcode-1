@@ -1,5 +1,5 @@
 # author: Xianglong Hu
-# speed: beats 99.74%
+# speed: beats 19%
 class Solution:
     def canPartitionKSubsets(self, nums: 'List[int]', k: int) -> bool:
         if sum(nums) % k:
@@ -7,24 +7,26 @@ class Solution:
         if k == 1:
             return True
         used = [0] * len(nums)
-        t = int(sum(nums) / k)
+        target = int(sum(nums) / k)
+        ts = [target] * k
         nums.sort(reverse=True)
 
-        def dfs(target, index, used, count):
-            if target == 0:
-                if count == 1:
-                    return True
-                else:
-                    return dfs(t, 0, used, count - 1)
-            for i in range(index, len(nums)):
-                if not used[i] and target >= nums[i]:
-                    used[i] = 1
-                    if dfs(target - nums[i], i + 1, used, count):
+        def dfs(ts, ind, used, count):
+            if ind == len(nums):
+                for g in range(0, k):
+                    if ts[g]:
+                        return False
+                return True
+            for g in range(0, k):
+                if ts[g] >= nums[ind]:
+                    ts[g] -= nums[ind]
+                    if dfs(ts, ind + 1, used, count):
                         return True
-                    used[i] = 0
+                    ts[g] += nums[ind]
             return False
 
-        return dfs(t, 0, used, k)
+        return dfs(ts, 0, used, k)
+
 
 
 if __name__ == '__main__':
