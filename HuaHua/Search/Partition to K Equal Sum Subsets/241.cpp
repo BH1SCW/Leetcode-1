@@ -7,6 +7,9 @@
 #include <unordered_map>
 #include <limits.h>
 
+//author: Xianglong Hu
+//data: 2019/04/10
+//speed: 100%
 namespace hu {
     int minus(int x, int y) { return x - y; }
 
