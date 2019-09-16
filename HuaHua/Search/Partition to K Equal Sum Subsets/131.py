@@ -2,13 +2,17 @@ from __future__ import annotations
 
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
+        memory = {}
         def is_palindrome(s):
             return s == s[::-1]
         def palindromes(s):
+            if s in memory:
+                return memory[s]
             ans = [(s[0], s[1:])]
             for i in range(2, len(s) + 1):
                 if is_palindrome(s[:i]):
                     ans += [(s[:i], s[i:])]
+            memory[s] = ans
             return ans
         ans = []
         def search(tail, path):
