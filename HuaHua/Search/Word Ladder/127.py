@@ -3,6 +3,33 @@ import string
 # speed: 98%
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: 'List[str]') -> int:
+        path = {}
+        d = set(wordList)
+        wordList = set(wordList)
+        q1 = [beginWord]
+        q2 = [endWord]
+        step = 0
+        def neighbor(w):
+            for i, c in enumerate(w):
+                for ch in string.ascii_lowercase:
+                    if ch == c:
+                        continue
+                    nb = w[:i] + ch + w[i + 1:]
+                    if nb in q2:
+                        return step + 1
+                    if nb in d:
+                        yield nb
+        while d or q1 or q2:
+            q = []
+            for w in q1:
+                for nb in neighbor(w):
+                    q.append(nb)
+                    path[nb] = [p + [w] for p in path.get(w, [[]])]
+            step += 1
+            q1, q2 = q2, q
+
+
+    def ladderLength2(self, beginWord: str, endWord: str, wordList: 'List[str]') -> int:
         dict = set(wordList)
         if not endWord in dict:
             return 0

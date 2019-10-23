@@ -1,6 +1,28 @@
 # author: Xianglong Hu
 # speed: beats 19%
 class Solution:
+    # 这题好像只有这个做法比较简洁，其实就是穷举，只是形式比较新颖
+    def canPartitionKSubsets(self, nums: 'List[int]', k: int) -> bool:
+        if sum(nums) % k:
+            return False
+        target = int(sum(nums) / k)
+        ts = [target] * k
+        nums.sort(reverse=True)
+
+        def dfs(ind):
+            if ind == len(nums):
+                return True
+            for g in range(0, k):
+                if ts[g] >= nums[ind]:
+                    ts[g] -= nums[ind]
+                    if dfs(ind + 1):
+                        return True
+                    ts[g] += nums[ind]
+            return False
+
+        return dfs(0)
+
+
     def canPartitionKSubsets(self, nums: 'List[int]', k: int) -> bool:
         if sum(nums) % k:
             return False
