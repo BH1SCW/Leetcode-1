@@ -1,9 +1,35 @@
 from __future__ import annotations
 
+def find_pivot(nums):
+    l, h = 1, len(nums) - 1
+    while l <= h:
+        m = (l + h) // 2
+        if nums[m - 1] > nums[m]:
+            return m
+        elif nums[m] > nums[-1]:
+            l = m + 1
+        else:
+            h = m - 1
+    return 0
 
 # 逻辑上面没什么问题，但是要考虑很多特殊情况，比如没有pivot，比如high和low要不要加一，比如空的list
+# 后来又重新写了一下，逻辑没怎么变，主要是变得简洁了一点，取余运算这个是跟别人学习来的，很有用
 class Solution:
-    def search(self, nums: List[int], target: int) -> int:
+    def search(self, nums: List[int], target: int) -> bool:
+        P = find_pivot(nums)
+        N = len(nums)
+        l, h = 0, N - 1
+        while l <= h:
+            m = (l + h) // 2
+            if nums[(m + P) % N] == target:
+                return (m + P) % N
+            elif nums[(m + P) % N] < target:
+                l = m + 1
+            else:
+                h = m - 1
+        return -1
+
+    def search2(self, nums: List[int], target: int) -> int:
         def find_pivot(nums):
             low, high = 0, len(nums) - 1
             while low < high:
