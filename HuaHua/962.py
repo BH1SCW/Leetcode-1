@@ -1,8 +1,22 @@
 from __future__ import annotations
 import math
 class Solution:
-    # 不知道为啥，这个memory usage 100%，但是速度只有5%, 看了一下别人的解法，确实只有
     def maxWidthRamp(self, A: List[int]) -> int:
+        stack = []
+        ans = 0
+        for i, a in enumerate(A):
+            if not stack or a < A[stack[-1]]:
+                stack += [i]
+        for i in range(len(A))[::-1]:
+            if not stack or i <= ans:
+                break
+            while stack and A[i] >= A[stack[-1]]:
+                j = stack.pop()
+                ans = max(ans, i - j)
+        return ans
+
+    # 不知道为啥，这个memory usage 100%，但是速度只有5%, 看了一下别人的解法，确实只有
+    def maxWidthRamp3(self, A: List[int]) -> int:
         index = [math.inf] * 50001
         ans = 0
         for i, a in enumerate(A):
