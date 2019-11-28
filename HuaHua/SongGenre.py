@@ -7,8 +7,9 @@ def root(x, n):
   trunc = lambda x: float("{0:.{1}f}".format(x, 3))
   while h - l > Err:
     # m = trunc((l + h) / 2)
-    m = round((l + h) / 2, 3)
-    if m == l: return m
+    # m = round((l + h) / 2, 3)
+    m = (l + h) / 2
+    # if m == l: return m
     value = m ** n - x
     if value > 0:
       h = m
